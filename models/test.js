@@ -14,7 +14,7 @@ for (var i = 0; i < 50; i++){
         bid: text,
         name: "Super Appart",
         picture: "http://cdn1-elle.ladmedia.fr/var/plain_site/storage/images/deco/reportages/city-guide/location-appartement-paris/appartement-renove-a-paris/83614169-1-fre-FR/Appartement-renove-a-Paris.jpg",
-        price: 1200000.0,
+        price: 1200000,
         country: ctry[Math.floor(Math.random()*ctry.length)],
         currency: cur[Math.floor(Math.random()*ctry.length)],
         stock: Math.floor(Math.random() * 1000 + 1000),

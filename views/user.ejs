@@ -1,112 +1,94 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<% include shared/header %>
-		
-	</head>
-	<body>
-		<% include shared/nav %>
-		<!-- main container -->
-		<div class="container">
-				<!-- page header -->
+<head>
+    <% include shared/header %>
+
+</head>
+<body>
+<% include shared/nav %>
+<!-- main container -->
+<div class="container">
+    <!-- page header -->
+    <div>
+        <form action="/api/user/logout" method="post">
+            <input type="submit" value="Log Out"/>
+        </form>
+    </div>
+
+    <div>
+        <form id="delete" action="/api/user/delete" method="post">
+            <input type="submit" value="Delete Account"/>
+        </form>
+        <script>
+            $("#delete").submit(function () {
+                if (!confirm("Click OK to continue?")) {
+                    event.preventDefault();
+                }
+            });
+        </script>
+    </div>
+
+    <div>
+        <form id="update" action="/api/user/update" method="post">
             <div>
-                <form action="/logout" method="post">
-                    <input type="submit" value="Log Out"/>
-                </form>
+                <label>Email:</label>
+                <input type="email" name="mail" value="<%= locals.mail %>" readonly/>
             </div>
-
             <div>
-                <form id="delete" action="/user" method="delete">
-                    <input type="submit" value="Delete Account"/>
-                </form>
-                <script>
-                    $("#delete").submit(function() {
-                        if (confirm("Click OK to continue?")){
-                            $.ajax({
-                                url: '',
-                                type: 'DELETE',
-                                success: function(result) {
-                                    window.location.href = "/";
-                                }
-                            });
-                        }
-                        event.preventDefault();
-                    });
-                </script>
+                <label>Nom:</label>
+                <input type="text" name="nom" value="<%= locals.nom %>" required/>
             </div>
+            <div>
+                <label>Prenom:</label>
+                <input type="text" name="prenom" value="<%= locals.prenom %>" required/>
+            </div>
+            <div>
+                <label>Année de naissance:</label>
+                <input type="number" name="age" min="1900" max="2099" step="1" value="<%= locals.age %>"/>
+            </div>
+            <div>
+                <label>Mot de passe:</label>
+                <input type="password" value="<%= locals.password %>" required name="password" minlength="5"
+                       title="Veuillez saisir un identifiant avec 4 à 8 chiffres hexadécimaux."/>
+            </div>
+            <div>
+                <label>Pays:</label>
+                <select id="pays" name="pays">
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Espagnol</option>
+                </select>
+                <script>$("#pays").val("<%= locals.pays %>");</script>
+            </div>
+            <div>
+                <input type="submit" value="Update"/>
+            </div>
+        </form>
+        <script>
+            $("#update").submit(function () {
+                var pass = $(this).find("input[name=password]");
+                if (pass.val().length < 64) {
+                    pass.val(SHA256(pass.val()));
+                }
+            });
+        </script>
+    </div>
+    <!-- end page header -->
 
-				<div>
-                    <form id="update" action="/user" method="put">
-                        <div>
-                            <label>Email:</label>
-                            <input type="email" name="mail" value="<%= locals.mail %>" readonly/>
-                        </div>
-                        <div>
-                            <label>Nom:</label>
-                            <input type="text" name="nom" value="<%= locals.nom %>" required/>
-                        </div>
-                        <div>
-                            <label>Prenom:</label>
-                            <input type="text" name="prenom" value="<%= locals.prenom %>" required/>
-                        </div>
-                        <div>
-                            <label>Année de naissance:</label>
-                            <input type="number" name="age" min="1900" max="2099" step="1" value="<%= locals.age %>" />
-                        </div>
-                        <div>
-                            <label>Mot de passe:</label>
-                            <input type="password" value="<%= locals.password %>" required name="password" minlength="5"
-                                   title="Veuillez saisir un identifiant avec 4 à 8 chiffres hexadécimaux."/>
-                        </div>
-                        <div>
-                            <label>Pays:</label>
-                            <select id="pays" name="pays">
-                                <option value="en">Anglais</option>
-                                <option value="fr">Français</option>
-                                <option value="es">Espagnol</option>
-                            </select>
-                            <script>$("#pays").val("<%= locals.pays %>");</script>
-                        </div>
-                        <div>
-                            <input type="submit" value="Update"/>
-                        </div>
-                    </form>
-                    <script>
-                        $("#update").submit(function() {
-                            var pass = $(this).find("input[name=password]");
-                            if (pass.val().length < 64){
-                                pass.val(SHA256(pass.val()));
-                            }
+    <% if(locals.error) { %>
+    <!-- error -->
+    <div class="row">
+        <div class="col-md-10 col-sm-10 col-xs-12 col-md-offset-1 col-sm-offset-1 col-xs-offset-0">
+            <div class="alert alert-danger">
+                <strong>Erreur : </strong> <%- error %>
+            </div>
+        </div>
+    </div>
+    <!-- end error -->
+    <% } %>
 
-                            $.ajax({
-                                url: '',
-                                data: $(this).serialize(),
-                                type: 'PUT',
-                                success: function(result) {
-                                    location.reload();
-                                }
-                            });
-
-                            event.preventDefault();
-                        });
-                    </script>
-				</div>
-				<!-- end page header -->
-
-				<% if(locals.error) { %>
-					<!-- error -->
-					<div class="row">
-						<div class="col-md-10 col-sm-10 col-xs-12 col-md-offset-1 col-sm-offset-1 col-xs-offset-0">
-							<div class="alert alert-danger">
-								<strong>Erreur : </strong> <%- error %>
-							</div>
-						</div>
-					</div>
-					<!-- end error -->
-				<% } %>
-
-		</div>
-		<!-- end main container -->
-		<% include shared/footer %>
-	</body>
+</div>
+<!-- end main container -->
+<% include shared/footer %>
+</body>
 </html>

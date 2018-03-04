@@ -1,35 +1,62 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<% include shared/header %>
-		
-	</head>
-	<body>
-		<% include shared/nav %>
-		<!-- main container -->
-		<div class="container">
-				<!-- page header -->
-				<div class="page-header">
-					<h1>Offres en cours</h1>
-				</div>
-				<!-- end page header -->
+<head>
+    <% include shared/header %>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<% include shared/nav %>
+<!-- main container -->
+<div class="container">
+    <!-- page header -->
+    <div class="page-header">
+        <h1>Offres en cours</h1>
+    </div>
+    <!-- end page header -->
 
+    <div>
+        <table id="myTable">
+            <thead>
+            <tr>
+                <th>Bid</th>
+                <th>Name</th>
+                <th>Picture</th>
+                <th>Price</th>
+                <th>Country</th>
+                <th>Currency</th>
+                <th>Stock</th>
+                <th>Sale</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: '/api/property/',
+                    type: 'POST'
+                }
+            });
 
+        });
+    </script>
 
-				<% if(locals.error) { %>
-					<!-- error -->
-					<div class="row">
-						<div class="col-md-10 col-sm-10 col-xs-12 col-md-offset-1 col-sm-offset-1 col-xs-offset-0">
-							<div class="alert alert-danger">
-								<strong>Erreur : </strong> <%- error %>
-							</div>
-						</div>
-					</div>
-					<!-- end error -->
-				<% } %>
+    <% if(locals.error) { %>
+    <!-- error -->
+    <div class="row">
+        <div class="col-md-10 col-sm-10 col-xs-12 col-md-offset-1 col-sm-offset-1 col-xs-offset-0">
+            <div class="alert alert-danger">
+                <strong>Erreur : </strong> <%- error %>
+            </div>
+        </div>
+    </div>
+    <!-- end error -->
+    <% } %>
 
-		</div>
-		<!-- end main container -->
-		<% include shared/footer %>
-	</body>
+</div>
+<!-- end main container -->
+<% include shared/footer %>
+</body>
 </html>

@@ -142,19 +142,10 @@ var demoController = require('./controllers/demoController');
  * Main routes.
  */
 
-
-// redirect default index
 app.get("/", demoController.getIndex);
 app.get("/login", demoController.getLogin);
 app.get("/signup", demoController.getSingup);
 app.get("/user", demoController.getUser);
-
-app.post("/login", demoController.postLogin);
-app.post("/signup", demoController.postSignup);
-app.post("/logout", demoController.logout);
-
-app.put("/user", demoController.updateUser);
-app.delete("/user", demoController.deleteUser);
 
 
 /**
@@ -167,8 +158,8 @@ router.get('/', function (req, res) {
     res.send('Welcome to Node JS V1');
 });
 
-router.use('/client', require('./api/client').router);
-router.use('/sale', require('./api/sale').router);
+router.use('/user', require('./api/user').router);
+router.use('/property', require('./api/property').router);
 
 app.use('/api', router);
 
@@ -193,7 +184,7 @@ var fs = require("fs");
 
 if (!fs.existsSync("./models/test.json")) {
 
-    const { exec } = require('child_process');
+    const {exec} = require('child_process');
     exec('node ./models/test.js > ./models/test.json && ' +
         'mongoimport --db optionizr --collection Properties --file ./models/test.json --jsonArray', (err, stdout, stderr) => {
         if (err) return;
