@@ -183,3 +183,22 @@ app.listen(app.get('port'), function () {
 });
 
 module.exports = app;
+
+
+/**
+ * Mongo Mook Data
+ */
+
+var fs = require("fs");
+
+if (!fs.existsSync("./models/test.json")) {
+
+    const { exec } = require('child_process');
+    exec('node ./models/test.js > ./models/test.json && ' +
+        'mongoimport --db optionizr --collection Properties --file ./models/test.json --jsonArray', (err, stdout, stderr) => {
+        if (err) return;
+
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+    });
+}
